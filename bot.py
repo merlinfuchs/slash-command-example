@@ -33,7 +33,6 @@ async def echo_command(data):
 
 
 async def command_entry(request):
-    print(request)
     # Read the request body as text (str)
     raw_data = await request.text()
 
@@ -78,9 +77,6 @@ async def command_entry(request):
 
 
 async def create_commands(app):
-    # We need a session to make http requests
-    session = ClientSession()
-
     # The json structure for our commands
     commands = [
         {
@@ -102,9 +98,12 @@ async def create_commands(app):
         }
     ]
 
+    # We need a session to make http requests
+    session = ClientSession()
+
     # Register all the commands at discord
     async with session.put(
-            f"https://discord.com/api/v8/applications/{CLIENT_ID}/commands",
+            f"https://discord.com/api/v8/applications/{CLIENT_ID}/guilds/{GUILD_ID}/commands",
             headers={"Authorization": f"Bot {TOKEN}"},
             json=commands
     ) as resp:
